@@ -11,6 +11,17 @@ function createWindow () {
     // and load the index.html of the app.
     win.loadURL('file://' + __dirname + '/index.html')
 
+    win.webContents.executeJavaScript(`
+        var path = require('path');
+        module.paths.push(path.resolve('node_modules'));
+        module.paths.push(path.resolve('../node_modules'));
+        module.paths.push(path.resolve(__dirname, '..', '..', 'electron', 'node_modules'));
+        module.paths.push(path.resolve(__dirname, '..', '..', 'electron.asar', 'node_modules'));
+        module.paths.push(path.resolve(__dirname, '..', '..', 'app', 'node_modules'));
+        module.paths.push(path.resolve(__dirname, '..', '..', 'app.asar', 'node_modules'));
+        path = undefined;
+    `);
+
     // Open the DevTools.
     win.webContents.openDevTools()
 
