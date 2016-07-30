@@ -2,26 +2,45 @@
 import { loadDBAsync, saveDBAsync } from './db-localStorage';
 
 export let API = {
-    getArray: function(key: string): Promise<any> {
+    arrayGet: function(key: string): Promise<any> {
         return loadDBAsync(key, []);
     },
 
-    addToArray: function(key: string, value: any): Promise<any> {
+    arrayUpdate: function(key: string, filter: Function, update: Function): Promise<any> {
+        return loadDBAsync(key, []).then(function (data) {
+            data.forEach(function (item, index) {
+                if (filter(item)) {
+                    data[index] = update(item);
+                }
+            });
+            return saveDBAsync(key, data);
+        });
+    },
+
+    arrayAdd: function(key: string, value: any): Promise<any> {
         return loadDBAsync(key, []).then(function (data) {
             data.push(value);
             return saveDBAsync(key, data);
         });
     },
 
-    removeFromArray: function(key: string, filter: Function): Promise<any> {
+    arrayDelete: function(key: string, filter: Function): Promise<any> {
         return loadDBAsync(key, []).then(function (data) {
-            var new_data = [];
-            data.forEach(function (d) {
-                if (!filter(d)) {
-                    new_data.push(d)
-                }
-            });
-            return saveDBAsync(key, new_data);
+            return saveDBAsync(key, data.filter(item => !filter(item)));
+        });
+    },
+
+    nextID: function(key: string): Promise<any> {
+        return loadDBAsync("IDs", {}).then(function (data) {
+            var id = 0;
+            if (typeof data[key] === "number") {
+                id = data[key];
+                data[key] += 1;
+            } else {
+                id = 1;
+                data[key] = 2;
+            }
+            return saveDBAsync("IDs", data).then(_ => id);
         });
     }
 }

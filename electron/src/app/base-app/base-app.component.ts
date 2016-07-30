@@ -7,12 +7,17 @@ import { OperationsComponent } from '../operations/operations.component';
 import { TagsComponent } from '../tags/tags.component';
 import { AccountsComponent } from '../accounts/accounts.component';
 
+import { TagService } from '../tags/tag.service';
+
 @Component({
     selector: 'my-base-app',
     templateUrl: 'app/base-app/base-app.component.html',
     directives: [
         ROUTER_DIRECTIVES,
         NGB_DIRECTIVES
+    ],
+    providers: [
+        TagService
     ],
     precompile: [
         NGB_PRECOMPILE,

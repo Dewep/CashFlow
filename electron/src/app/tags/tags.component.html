@@ -1,7 +1,37 @@
-<h2>Tags</h2>
+<div class="row">
+    <div class="col-md-7">
+        <h2>List of tags</h2>
 
-<i class="fa fa-camera-retro fa-lg"></i> fa-lg
-<i class="fa fa-camera-retro fa-2x"></i> fa-2x
-<i class="fa fa-camera-retro fa-3x"></i> fa-3x
-<i class="fa fa-camera-retro fa-4x"></i> fa-4x
-<i class="fa fa-camera-retro fa-5x"></i> fa-5x
+        <ul class="list-group">
+            <button type="button" class="list-group-item list-group-item-action" *ngFor="let tag of tags" (click)="selectTag(tag)" [class.active]="tag === selectedTag">
+                <span class="tag tag-default tag-pill pull-xs-right">{{tag.id}}</span>
+                {{tag.name}}
+            </button>
+        </ul>
+    </div>
+
+    <div class="col-md-5">
+        <h2><span *ngIf="selectedTag">Edit the tag "{{selectedTag.name}}"</span><span *ngIf="addingTag">Add a new tag</span></h2>
+
+        <div class="alert alert-danger" role="alert" *ngIf="error">
+            <strong>{{error}}</strong>
+        </div>
+
+        <div class="form-group row">
+            <label for="formTagInputID" class="col-form-label col-md-2">ID: </label>
+            <div class="col-sm-10">
+              <p class="form-control-static">{{modelTag.id}}</p>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="formTagInputName" class="col-form-label col-md-2">Name: </label>
+            <div class="col-md-10">
+                <input [(ngModel)]="modelTag.name" class="form-control" id="formTagInputName" placeholder="Name of the tag" />
+            </div>
+        </div>
+
+        <button (click)="save()" class="btn btn-primary">Save</button>
+        <button (click)="delete()" class="btn btn-danger" [disabled]="addingTag">Delete</button>
+        <button (click)="addTag()" class="btn btn-warning" [disabled]="addingTag">Add New Tag</button>
+    </div>
+</div>
