@@ -1,0 +1,52 @@
+/*************************************************************/
+/***************** CUSTOM BOOSTRAP VARIABLES *****************/
+/*************************************************************/
+
+$gray-dark:                 #7b8a8b !default;
+$gray:                      #95a5a6 !default;
+$gray-light:                #b4bcc2 !default;
+$gray-lighter:              #ecf0f1 !default;
+$gray-lightest:             #f7f7f9 !default;
+
+$brand-primary:             #2C3E50 !default;
+$brand-success:             #18BC9C !default;
+$brand-info:                #3498DB !default;
+$brand-warning:             #F39C12 !default;
+$brand-danger:              #E74C3C !default;
+$brand-inverse:             $gray-dark !default;
+
+$body-bg:                   #F6F8F8 !default;
+$body-color:                $gray-dark !default;
+$link-color:                $brand-success !default;
+$link-decoration:           none !default;
+$link-hover-color:          $link-color !default;
+$link-hover-decoration:     underline !default;
+
+/*************************************************************/
+/*************************************************************/
+/*************************************************************/
+
+@font-face {
+    font-family: "Ubuntu";
+    font-style: normal;
+    font-weight: normal;
+    src: url("fonts/Ubuntu/Ubuntu-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Ubuntu";
+    font-style: normal;
+    font-weight: bold;
+    src: url("fonts/Ubuntu/Ubuntu-Bold.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Ubuntu";
+    font-style: italic;
+    font-weight: normal;
+    src: url("fonts/Ubuntu/Ubuntu-Italic.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Ubuntu";
+    font-style: italic;
+    font-weight: bold;
+    src: url("fonts/Ubuntu/Ubuntu-BoldItalic.ttf") format("truetype");
+}

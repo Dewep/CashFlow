@@ -34,9 +34,6 @@ gulp.task('private:clean', function(done) {
 gulp.task('private:copy-vendor-angular2', function() {
     return gulp.src('node_modules/@angular/**/*').pipe(gulp.dest('dist/frontend/vendor/@angular'));
 });
-gulp.task('private:copy-vendor-angular2-in-memory-web-api', function() {
-    return gulp.src('node_modules/angular2-in-memory-web-api/**/*').pipe(gulp.dest('dist/frontend/vendor/angular2-in-memory-web-api'));
-});
 
 // RXJS
 gulp.task('private:copy-vendor-rxjs', function() {
@@ -44,21 +41,40 @@ gulp.task('private:copy-vendor-rxjs', function() {
 });
 
 // BOOTSTRAP
+/*
+** Custom Bootstrap colors:
+** - cd node_modules/bootstrap/
+** - Update _custom.scss in scss directory (with variables in arc/app/styles/_general.scss)
+** - Run "grunt dist-css" (need to have grunt-cli installed, and to run "npm install" previously)
+**/
 gulp.task('private:copy-vendor-bootstrap-css', function() {
     return gulp.src('node_modules/bootstrap/dist/css/**/*.min.css').pipe(gulp.dest('dist/frontend/vendor/css'));
 });
-gulp.task('private:copy-vendor-bootstrap-font', function() {
-    return gulp.src('node_modules/bootstrap/dist/font/*').pipe(gulp.dest('dist/frontend/vendor/font'));
-});
 gulp.task('private:copy-vendor-bootstrap-js', function() {
-    return gulp.src('node_modules/bootstrap/dist/**/*').pipe(gulp.dest('dist/frontend/vendor/js'));
+    return gulp.src('node_modules/@ng-bootstrap/**/*').pipe(gulp.dest('dist/frontend/vendor/@ng-bootstrap'));
 });
 gulp.task('private:copy-vendor-bootstrap', function (done) {
     gulpSequence(
         [
             'private:copy-vendor-bootstrap-css',
-            'private:copy-vendor-bootstrap-font',
             'private:copy-vendor-bootstrap-js'
+        ],
+        done
+    );
+});
+
+// FONT AWESOME
+gulp.task('private:copy-vendor-font-awesome-css', function() {
+    return gulp.src('node_modules/font-awesome/css/**/*.min.css').pipe(gulp.dest('dist/frontend/vendor/css'));
+});
+gulp.task('private:copy-vendor-font-awesome-fonts', function() {
+    return gulp.src('node_modules/font-awesome/fonts/*').pipe(gulp.dest('dist/frontend/vendor/fonts'));
+});
+gulp.task('private:copy-vendor-font-awesome', function (done) {
+    gulpSequence(
+        [
+            'private:copy-vendor-font-awesome-css',
+            'private:copy-vendor-font-awesome-fonts'
         ],
         done
     );
@@ -90,9 +106,9 @@ gulp.task('private:build-vendor', function (done) {
     gulpSequence(
         [
             'private:copy-vendor-angular2',
-            'private:copy-vendor-angular2-in-memory-web-api',
             'private:copy-vendor-rxjs',
             'private:copy-vendor-bootstrap',
+            'private:copy-vendor-font-awesome',
             'private:copy-vendor-system'
         ],
         [
@@ -107,23 +123,19 @@ gulp.task('private:build-vendor', function (done) {
 /****************************** APP ******************************/
 
 gulp.task('private:copy-templates', function() {
-    return gulp.src('src/app/**/*.html')
-        .pipe(gulp.dest('dist/frontend/app'));
+    return gulp.src('src/app/**/*.html').pipe(gulp.dest('dist/frontend/app'));
 });
 
 gulp.task('private:copy-fonts', function() {
-    return gulp.src('src/app/fonts/**/*')
-        .pipe(gulp.dest('dist/frontend/css/fonts'));
+    return gulp.src('src/app/styles/fonts/**/*').pipe(gulp.dest('dist/frontend/css/fonts'));
 });
 
 gulp.task('private:copy-app-main-file', function() {
-    return gulp.src('src/main.js')
-        .pipe(gulp.dest('dist'));
+    return gulp.src('src/main.js').pipe(gulp.dest('dist'));
 });
 
 gulp.task('private:copy-sys-config', function() {
-    return gulp.src('src/systemjs.config.js')
-        .pipe(gulp.dest('dist/frontend'));
+    return gulp.src('src/systemjs.config.js').pipe(gulp.dest('dist/frontend'));
 });
 
 gulp.task('private:build-app-ts', function() {

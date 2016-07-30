@@ -1,0 +1,21 @@
+<nav class="navbar navbar-full navbar-dark bg-primary">
+    <a class="navbar-brand m-b-0" [routerLink]="['/dashboard']">CashFlow</a>
+    <ul class="nav navbar-nav pull-xs-right">
+        <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" [routerLink]="['/dashboard']">DashBoard</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" [routerLink]="['/operations']">Operations</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" [routerLink]="['/categories']">Categories</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" [routerLink]="['/accounts']">Accounts</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <router-outlet></router-outlet>
+</div>

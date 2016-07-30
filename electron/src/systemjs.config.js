@@ -5,16 +5,16 @@
 (function(global) {
   // map tells the System loader where to look for things
   var map = {
-    'app':                        'app/ts', // 'app',
+    'app':                        'app', // 'app',
     '@angular':                   'vendor/@angular',
-    'angular2-in-memory-web-api': 'vendor/angular2-in-memory-web-api',
+    '@ng-bootstrap':              'vendor/@ng-bootstrap',
     'rxjs':                       'vendor/rxjs'
   };
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {
     'app':                        { main: 'main.js',  defaultExtension: 'js' },
     'rxjs':                       { defaultExtension: 'js' },
-    'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
+    '@ng-bootstrap/ng-bootstrap': { main: 'index.js', defaultExtension: 'js' },
   };
   var ngPackageNames = [
     'common',
