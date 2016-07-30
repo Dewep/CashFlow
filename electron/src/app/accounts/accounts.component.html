@@ -1,1 +1,55 @@
-<h2>Accounts</h2>
+<div class="row">
+    <div class="col-md-7">
+        <h2>List of accounts</h2>
+
+        <ul class="list-group">
+            <button type="button" class="list-group-item list-group-item-action" *ngFor="let account of accounts" (click)="selectAccount(account)" [class.active]="account === selectedAccount">
+                <span class="tag tag-default tag-pill pull-xs-right">{{account.id}}</span>
+                {{account.getLongTitle()}}
+            </button>
+        </ul>
+    </div>
+
+    <div class="col-md-5">
+        <h2><span *ngIf="selectedAccount">Edit the account "{{selectedAccount.getTitle()}}"</span><span *ngIf="addingAccount">Add a new account</span></h2>
+
+        <div class="alert alert-danger" role="alert" *ngIf="error">
+            <strong>{{error}}</strong>
+        </div>
+
+        <div class="form-group row">
+            <label for="formAccountInputID" class="col-form-label col-md-2">ID: </label>
+            <div class="col-sm-10">
+                <p class="form-control-static">{{modelAccount.id}}</p>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="formAccountInputName" class="col-form-label col-md-2">Name: </label>
+            <div class="col-md-10">
+                <input [(ngModel)]="modelAccount.name" class="form-control" id="formAccountInputName" placeholder="Name of the account" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="formAccountInputNumber" class="col-form-label col-md-2">Number: </label>
+            <div class="col-md-10">
+                <input [(ngModel)]="modelAccount.number" class="form-control" type="number" id="formAccountInputNumber" placeholder="Number of the account" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="formAccountInputBank" class="col-form-label col-md-2">Bank: </label>
+            <div class="col-md-10">
+                <input [(ngModel)]="modelAccount.bank" class="form-control" id="formAccountInputBank" placeholder="Bank of the account" />
+            </div>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="modelAccount.current">
+                Is it the current account?
+            </label>
+        </div>
+
+        <button (click)="save()" class="btn btn-primary">Save</button>
+        <button (click)="delete()" class="btn btn-danger" [disabled]="addingAccount">Delete</button>
+        <button (click)="addAccount()" class="btn btn-warning" [disabled]="addingAccount">Add New Account</button>
+    </div>
+</div>

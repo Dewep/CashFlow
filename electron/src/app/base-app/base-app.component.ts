@@ -8,6 +8,7 @@ import { TagsComponent } from '../tags/tags.component';
 import { AccountsComponent } from '../accounts/accounts.component';
 
 import { TagService } from '../tags/tag.service';
+import { AccountService } from '../accounts/account.service';
 
 @Component({
     selector: 'my-base-app',
@@ -17,7 +18,8 @@ import { TagService } from '../tags/tag.service';
         NGB_DIRECTIVES
     ],
     providers: [
-        TagService
+        TagService,
+        AccountService
     ],
     precompile: [
         NGB_PRECOMPILE,

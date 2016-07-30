@@ -11,15 +11,17 @@ import { TagService } from './tag.service';
 export class TagsComponent implements OnInit {
     tags: Tag[];
     selectedTag: Tag = null;
-    modelTag: Tag = { id: 0, name: "New" };
+    modelTag: Tag;
     addingTag = true;
     error: any;
 
-    constructor(private tagService: TagService) { }
+    constructor(private tagService: TagService) {
+        this.addTag();
+    }
 
     getTags() {
         this.tagService
-            .getTags()
+            .getAll()
             .then(tags => this.tags = tags)
             .catch(error => this.error = error);
     }
@@ -31,7 +33,7 @@ export class TagsComponent implements OnInit {
     addTag() {
         this.addingTag = true;
         this.selectedTag = null;
-        this.modelTag = { id: 0, name: "New" };
+        this.modelTag = new Tag().fromObject({ id: 0, name: "New" });
     }
 
     selectTag(tag: Tag) {
