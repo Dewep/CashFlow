@@ -2,7 +2,7 @@ import { provideRouter, RouterConfig }  from '@angular/router';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { OperationsComponent } from './operations/operations.component';
-import { CategoriesComponent } from './categories/categories.component';
+import { TagsComponent } from './tags/tags.component';
 import { AccountsComponent } from './accounts/accounts.component';
 
 const routes: RouterConfig = [
@@ -20,8 +20,8 @@ const routes: RouterConfig = [
         component: OperationsComponent
     },
     {
-        path: 'categories',
-        component: CategoriesComponent
+        path: 'tags',
+        component: TagsComponent
     },
     {
         path: 'accounts',

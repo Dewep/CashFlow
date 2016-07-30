@@ -10,14 +10,15 @@ var gulpSymdest = require('gulp-symdest');
 var gulpSass = require('gulp-sass');
 
 
-var tsProject = {
+/*var tsProject = {
     target: 'ES6',
     module: 'commonjs',
     declaration: true,
     noExternalResolve: false,
     experimentalDecorators: true,
     outDir: 'dist/frontend/app'
-};
+};*/
+var tsProject = gulpTs.createProject('tsconfig.json');
 
 
 /****************************** CLEAN ******************************/
@@ -139,7 +140,7 @@ gulp.task('private:copy-sys-config', function() {
 });
 
 gulp.task('private:build-app-ts', function() {
-    var tsResult = gulp.src('src/app/**/*.ts').pipe(gulpTs(tsProject));
+    var tsResult = gulp.src(['src/app/**/*.ts', 'typings/**/*.ts']).pipe(gulpTs(tsProject));
 
     /*var project = gulpTs.createProject('tsconfig.json', {
         typescript: require('typescript')

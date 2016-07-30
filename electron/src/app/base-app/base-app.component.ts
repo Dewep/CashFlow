@@ -4,7 +4,7 @@ import { NGB_DIRECTIVES, NGB_PRECOMPILE } from '@ng-bootstrap/ng-bootstrap';
 
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { OperationsComponent } from '../operations/operations.component';
-import { CategoriesComponent } from '../categories/categories.component';
+import { TagsComponent } from '../tags/tags.component';
 import { AccountsComponent } from '../accounts/accounts.component';
 
 @Component({
@@ -18,7 +18,7 @@ import { AccountsComponent } from '../accounts/accounts.component';
         NGB_PRECOMPILE,
         DashboardComponent,
         OperationsComponent,
-        CategoriesComponent,
+        TagsComponent,
         AccountsComponent
     ]
 })
