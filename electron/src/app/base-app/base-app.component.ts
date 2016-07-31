@@ -6,6 +6,7 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 import { OperationsComponent } from '../operations/operations.component';
 import { OperationsListComponent } from '../operations/operations-list.component';
 import { OperationDetailComponent } from '../operations/operation-detail.component';
+import { OperationImportFileComponent } from '../operations/import/operation-import-file.component';
 import { TagsComponent } from '../tags/tags.component';
 import { AccountsComponent } from '../accounts/accounts.component';
 
@@ -29,10 +30,11 @@ import { OperationService } from '../operations/operation.service';
         NGB_PRECOMPILE,
         DashboardComponent,
         OperationsComponent,
+        OperationsListComponent,
         OperationDetailComponent,
+        OperationImportFileComponent,
         TagsComponent,
-        AccountsComponent,
-        OperationsListComponent
+        AccountsComponent
     ]
 })
 
