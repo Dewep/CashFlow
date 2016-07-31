@@ -1,0 +1,14 @@
+<div class="list-group">
+    <div class="list-group-item list-group-item-action display-elements-hover-only" *ngFor="let operation of operations">
+        <span *ngFor="let missing of operation.getImportantMissings()" class="tag tag-danger tag-pill pull-xs-right">{{missing}}</span>
+        <span *ngFor="let tag of operation.tags" class="tag tag-{{tag.getColor()}} tag-pill pull-xs-right">{{tag.name}}</span>
+        <h5 class="list-group-item-heading">
+            <button *ngIf="operation.id > 0" type="button" class="btn btn-sm btn-success" [routerLink]="['/operations/detail', operation.id]"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+            {{operation.getTitle()}}
+        </h5>
+        <p class="list-group-item-text">
+            <span *ngFor="let info of operation.getInformations()" class="tag tag-default">{{info}}</span>
+            <small class="display-on-hover-only">{{operation.getDescription()}}</small>
+        </p>
+    </div>
+</div>

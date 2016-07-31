@@ -33,7 +33,7 @@ export class AccountsComponent implements OnInit {
     addAccount() {
         this.addingAccount = true;
         this.selectedAccount = null;
-        this.modelAccount = new Account().fromObject({ id: 0, name: "Account name", number: 0, bank: "Bank name", current: false });
+        this.modelAccount = new Account();
     }
 
     selectAccount(account: Account) {

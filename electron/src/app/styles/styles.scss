@@ -4,12 +4,23 @@ body {
     font-family: "Ubuntu";
 }
 
-.base-content {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+body, #main-header, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6, .nav-tabs {
+    margin-bottom: 1rem;
 }
 
-.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+select[multiple] {
+    overflow-y: auto;
+    height: 15rem;
+}
+
+.tag {
+    margin: 0 0.1rem;
+}
+
+.display-on-hover-only {
+    display: none;
+}
+
+.display-elements-hover-only:hover .display-on-hover-only {
+    display: inherit;
 }

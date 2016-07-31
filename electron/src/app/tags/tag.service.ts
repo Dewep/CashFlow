@@ -7,7 +7,7 @@ import { ArrayService } from '../db/array.service';
 export class TagService extends ArrayService<Tag> {
     protected keyDB = "CashFlow-tags";
 
-    getInstance() {
-        return new Tag();
+    getInstanceFromStandardObject(obj) {
+        return new Tag().fromStandardObject(obj);
     }
 }

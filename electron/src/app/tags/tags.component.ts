@@ -33,7 +33,7 @@ export class TagsComponent implements OnInit {
     addTag() {
         this.addingTag = true;
         this.selectedTag = null;
-        this.modelTag = new Tag().fromObject({ id: 0, name: "New" });
+        this.modelTag = new Tag();
     }
 
     selectTag(tag: Tag) {

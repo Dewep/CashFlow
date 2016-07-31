@@ -1,10 +1,20 @@
 export abstract class BaseModelDB {
     id: number;
 
-    fromObject(obj) {
-        for (var propName in obj) {
-            this[propName] = obj[propName];
+    fromStandardObject(obj): Promise<BaseModelDB> {
+        return new Promise((resolve, reject) => {
+            for (var propName in obj) {
+                this[propName] = obj[propName];
+            }
+            resolve(this);
+        });
+    }
+
+    toStandardObject() {
+        var obj = {};
+        for (var propName in this) {
+            obj[propName] = this[propName];
         }
-        return this;
+        return obj;
     }
 }

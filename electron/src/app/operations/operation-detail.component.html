@@ -1,0 +1,80 @@
+<h2><span *ngIf="adding">Add a new operation</span><span *ngIf="!adding">Edit the operation #{{model.id}}</span></h2>
+
+<div class="offset-sm-1 col-sm-10">
+    <div class="alert alert-danger" role="alert" *ngIf="error">
+        <strong>{{error}}</strong>
+    </div>
+
+    <div class="form-group row">
+        <label for="formOperationInputName" class="col-sm-2 col-form-label">Name</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="model.name" type="text" class="form-control" id="formOperationInputName" placeholder="Operation name">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="formOperationInputDate" class="col-sm-2 col-form-label">Date</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="model.date" type="date" class="form-control" id="formOperationInputDate" placeholder="Operation date">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="formOperationInputRealDate" class="col-sm-2 col-form-label">Real date</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="model.real_date" type="date" class="form-control" id="formOperationInputRealDate" placeholder="Real operation date">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="formOperationInputDescription" class="col-sm-2 col-form-label">Description</label>
+        <div class="col-sm-10">
+            <textarea [(ngModel)]="model.description" class="form-control" id="formOperationInputDescription" rows="5"></textarea>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="formOperationInputPrice" class="col-sm-2 col-form-label">Price</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <input [(ngModel)]="model.price" type="number" step="0.01" class="form-control" id="formOperationInputPrice" placeholder="Price (can be negative)">
+                <div class="input-group-addon">€</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="formOperationInputBankOperationID" class="col-sm-2 col-form-label">Bank operation ID</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="model.bank_operation_id" type="text" class="form-control" id="formOperationInputBankOperationID" placeholder="Bank operation ID">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="formOperationInputAccount" class="col-sm-2 col-form-label">Bank account</label>
+        <div class="col-sm-10">
+            <select [(ngModel)]="model.account" class="form-control" id="formOperationInputAccount">
+                <option *ngFor="let account of accounts" [ngValue]="account">{{account.getLongTitle()}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="formOperationInputTags" class="col-sm-2 col-form-label">Tags</label>
+        <div class="col-sm-10">
+            <select [(ngModel)]="model.tags" multiple class="form-control" id="formOperationInputTags">
+                <option *ngFor="let tag of tags" [ngValue]="tag">{{tag.name}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="formOperationInputTitle" class="col-sm-2 col-form-label">Custom title</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="model.title" type="text" class="form-control" id="formOperationInputTitle" placeholder="Custom title">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="formOperationInputCompany" class="col-sm-2 col-form-label">Company</label>
+        <div class="col-sm-10">
+            <input [(ngModel)]="model.company" type="text" class="form-control" id="formOperationInputCompany" placeholder="Company">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="offset-sm-2 col-sm-10">
+            <button (click)="save()" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</div>

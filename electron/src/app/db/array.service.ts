@@ -5,12 +5,20 @@ import { BaseModelDB } from './base-model-db';
 export abstract class ArrayService<T extends BaseModelDB> {
     protected keyDB = undefined;
 
-    abstract getInstance(): T;
+    abstract getInstanceFromStandardObject(obj): Promise<T>;
 
     getAll(): Promise<T[]> {
         return API.arrayGet(this.keyDB).then(data => {
-            return data.map(item => this.getInstance().fromObject(item));
+            return Promise.all<T>(data.map(item => this.getInstanceFromStandardObject(item)))
         });
+    }
+
+    find(filter: Function): Promise<T[]> {
+        return this.getAll().then(data => data.filter(item => filter(item)));
+    }
+
+    findOne(filter: Function): Promise<T> {
+        return this.find(filter).then(data => data.length ? data[0] : null);
     }
 
     save(item: T): Promise<void> {
@@ -21,13 +29,13 @@ export abstract class ArrayService<T extends BaseModelDB> {
     }
 
     update(item: T): Promise<void> {
-        return API.arrayUpdate(this.keyDB, t => t.id === item.id, t => item);
+        return API.arrayUpdate(this.keyDB, t => t.id === item.id, t => item.toStandardObject());
     }
 
     add(item: T): Promise<void> {
         return API.nextID(this.keyDB).then(id => {
             item.id = id;
-            return API.arrayAdd(this.keyDB, item);
+            return API.arrayAdd(this.keyDB, item.toStandardObject());
         });
     }
 
