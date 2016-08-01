@@ -39,6 +39,14 @@ export abstract class ArrayService<T extends BaseModelDB> {
         });
     }
 
+    addAll(items: T[]): Promise<void> {
+        return items.reduce((promise, item) => {
+            return promise.then(_ => {
+                return this.add(item);
+            });
+        }, Promise.resolve(null));
+    }
+
     delete(item: T): Promise<void> {
         return API.arrayDelete(this.keyDB, t => t.id === item.id);
     }

@@ -26,10 +26,15 @@ export class Operation extends BaseModelDB {
             prefix += `[${this.company}] `;
         }
 
-        var title = this.title ? this.title : this.name;
-
-        return `${prefix}${title}: ${this.price}€`;
+        if (this.title) {
+            return prefix + this.title;
+        }
+        return prefix + this.name;
     }
+
+    isCredit() { return this.price >= 0; }
+    isDebit() { return !this.isCredit(); }
+    getPriceColor() { return this.isCredit() ? 'success' : 'danger'; }
 
     getDescription() {
         if (this.title) {
