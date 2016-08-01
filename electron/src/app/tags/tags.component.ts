@@ -1,84 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
+import { ArrayService } from '../db/array.service';
+import { OperationParameterComponent } from '../operations/operation-parameter.component';
 import { Tag } from './tag';
 import { TagService } from './tag.service';
 
 @Component({
     selector: 'my-tags',
-    templateUrl: 'app/tags/tags.component.html'
+    templateUrl: 'app/operations/operation-parameter.component.html'
 })
 
-export class TagsComponent implements OnInit {
-    tags: Tag[];
-    selectedTag: Tag = null;
-    modelTag: Tag;
-    addingTag = true;
-    error: any;
-    newMatch: string = "";
-
+export class TagsComponent extends OperationParameterComponent<Tag> {
     constructor(private tagService: TagService) {
-        this.addTag();
+        super();
+        this.parameterName = 'tags';
     }
 
-    addMatch() {
-        if (this.selectedTag && this.newMatch.length && this.selectedTag.autoMatches.indexOf(this.newMatch) === -1) {
-            this.selectedTag.autoMatches.push(this.newMatch);
-            this.newMatch = "";
-        }
-    }
+    getService(): ArrayService<Tag> {
+        return this.tagService;
+    };
 
-    deleteMatch(match) {
-        if (this.selectedTag) {
-            this.selectedTag.autoMatches = this.selectedTag.autoMatches.filter(item => item !== match);
-        }
-    }
-
-    getTags() {
-        this.tagService
-            .getAll()
-            .then(tags => this.tags = tags)
-            .catch(error => this.error = error);
-    }
-
-    ngOnInit() {
-        this.getTags();
-    }
-
-    addTag() {
-        this.addingTag = true;
-        this.selectedTag = null;
-        this.modelTag = new Tag();
-    }
-
-    selectTag(tag: Tag) {
-        this.selectedTag = tag;
-        this.addingTag = false;
-        this.modelTag = tag;
-    }
-
-    delete() {
-        if (!this.selectedTag) {
-            return;
-        }
-        this.tagService
-            .delete(this.selectedTag)
-            .then(res => {
-                this.tags = this.tags.filter(t => t.id !== this.selectedTag.id);
-                this.selectedTag = null;
-            })
-            .catch(error => this.error = error);
-    }
-
-    save() {
-        this.tagService.save(this.modelTag)
-            .then(res => {
-                if (this.selectedTag) {
-                    this.selectedTag = this.modelTag;
-                } else {
-                    this.tags.push(this.modelTag);
-                }
-                this.addTag();
-            })
-            .catch(error => this.error = error);
-    }
+    getNewInstance(): Tag {
+        return new Tag();
+    };
 }

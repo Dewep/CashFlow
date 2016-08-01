@@ -22,31 +22,6 @@ export class ImportPluginFileCATxtFR extends BaseImportPlugin {
         return new Date().getFullYear() + '-' + content.substr(3, 2) + '-' + content.substr(0, 2);
     }
 
-    parsePayment(content: string) {
-        var payments = {
-            "PayPal": this.tagPaymentPaypal,
-            "PRELEVMNT": this.tagPaymentDirectDebit,
-            "PRELEVEMENT": this.tagPaymentDirectDebit,
-            "PAIEMENT PAR CARTE": this.tagPaymentDebitCard,
-            "REGUL OPE CREDITRICES": this.tagPaymentDirectDebit,
-            "RETRAIT AU DISTRIBUTEUR": this.tagPaymentCash,
-            "VIREMENT EN VOTRE FAVEUR": this.tagPaymentTransfer,
-            "INTERETS CREDITEURS": this.tagPaymentTransfer,
-            "RETRO A TITRE COMMERCIAL": this.tagPaymentTransfer,
-            "REMISE DE CHEQUE": this.tagPaymentCheque,
-            "AVOIR": this.tagPaymentTransfer
-        };
-        for (let key in payments) {
-            if (!payments.hasOwnProperty(key)) {
-                continue;
-            }
-            if (content.startsWith(key)) {
-                return payments[key];
-            }
-        }
-        return null;
-    }
-
     parseOperation(lines: string[]): Promise<Operation> {
         return new Promise<Operation>((resolve, reject) => {
             var operation = new Operation();
@@ -62,7 +37,6 @@ export class ImportPluginFileCATxtFR extends BaseImportPlugin {
                         line_content = line_content.substr(0, line_content.length - 5).trim();
                     }
                     operation.name = line_content;
-                    payment_tag = this.parsePayment(line_content);
                 } else if (i == lines.length - 1) {
                     var multiplier = 1;
                     if (lines[i].startsWith("Débit")) {
@@ -70,9 +44,6 @@ export class ImportPluginFileCATxtFR extends BaseImportPlugin {
                     }
                     operation.price = multiplier * parseFloat(line_content.replace(' ', '').replace(',', '.'));
                 } else if (i >= 2) {
-                    if (payment_tag === null) {
-                        payment_tag = this.parsePayment(line_content);
-                    }
                     description.push(line_content);
                 }
             }

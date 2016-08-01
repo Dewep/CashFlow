@@ -1,9 +1,6 @@
-import { BaseModelDB } from '../db/base-model-db';
+import { OperationParameter } from '../operations/operation-parameter';
 
-export class Tag extends BaseModelDB {
-    name: string = '';
-    autoMatches: string[] = [];
-
+export class Tag extends OperationParameter {
     getColor(): string {
         if (this.name.startsWith("payment:")) {
             return "warning";

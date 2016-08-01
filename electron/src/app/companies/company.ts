@@ -1,6 +1,4 @@
-import { BaseModelDB } from '../db/base-model-db';
+import { OperationParameter } from '../operations/operation-parameter';
 
-export class Company extends BaseModelDB {
-    name: string = '';
-    autoMatches: string[] = [];
+export class Company extends OperationParameter {
 }
