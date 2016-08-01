@@ -1,5 +1,5 @@
 export abstract class BaseModelDB {
-    id: number;
+    id: number = 0;
 
     fromStandardObject(obj): Promise<BaseModelDB> {
         return new Promise((resolve, reject) => {

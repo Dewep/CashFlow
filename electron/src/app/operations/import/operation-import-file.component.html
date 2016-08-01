@@ -31,7 +31,9 @@
 
     <div *ngIf="state == 'confirm_importation'">
         <section>
-            <my-operations-list [operations]="operations"></my-operations-list>
+            <div class="list-group">
+                <my-operation-detail *ngFor="let operation of operations" [operation]="operation" [saveDB]="false" (onOperationUpdate)="onOperationUpdate(operation, $event)"></my-operation-detail>
+            </div>
         </section>
 
         <div class="form-group row">

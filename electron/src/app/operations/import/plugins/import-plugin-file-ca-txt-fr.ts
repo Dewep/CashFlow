@@ -24,17 +24,17 @@ export class ImportPluginFileCATxtFR extends BaseImportPlugin {
 
     parsePayment(content: string) {
         var payments = {
-            "PayPal": this.getTagPaymentPaypal(),
-            "PRELEVMNT": this.getTagPaymentDirectDebit(),
-            "PRELEVEMENT": this.getTagPaymentDirectDebit(),
-            "PAIEMENT PAR CARTE": this.getTagPaymentDebitCard(),
-            "REGUL OPE CREDITRICES": this.getTagPaymentDirectDebit(),
-            "RETRAIT AU DISTRIBUTEUR": this.getTagPaymentCash(),
-            "VIREMENT EN VOTRE FAVEUR": this.getTagPaymentTransfer(),
-            "INTERETS CREDITEURS": this.getTagPaymentTransfer(),
-            "RETRO A TITRE COMMERCIAL": this.getTagPaymentTransfer(),
-            "REMISE DE CHEQUE": this.getTagPaymentCheque(),
-            "AVOIR": this.getTagPaymentTransfer()
+            "PayPal": this.tagPaymentPaypal,
+            "PRELEVMNT": this.tagPaymentDirectDebit,
+            "PRELEVEMENT": this.tagPaymentDirectDebit,
+            "PAIEMENT PAR CARTE": this.tagPaymentDebitCard,
+            "REGUL OPE CREDITRICES": this.tagPaymentDirectDebit,
+            "RETRAIT AU DISTRIBUTEUR": this.tagPaymentCash,
+            "VIREMENT EN VOTRE FAVEUR": this.tagPaymentTransfer,
+            "INTERETS CREDITEURS": this.tagPaymentTransfer,
+            "RETRO A TITRE COMMERCIAL": this.tagPaymentTransfer,
+            "REMISE DE CHEQUE": this.tagPaymentCheque,
+            "AVOIR": this.tagPaymentTransfer
         };
         for (let key in payments) {
             if (!payments.hasOwnProperty(key)) {

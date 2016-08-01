@@ -2,13 +2,16 @@
     <div class="col-md-9">
         <h2>List of operations</h2>
 
-        <my-operations-list [operations]="operations"></my-operations-list>
+        <div class="list-group">
+            <my-operation-detail *ngFor="let operation of operations" [operation]="operation" [saveDB]="true" (onOperationUpdate)="onOperationUpdate(operation, $event)"></my-operation-detail>
+        </div>
     </div>
 
     <div class="col-md-3">
         <ul class="list-group">
-            <a class="list-group-item list-group-item-action list-group-item-warning" [routerLink]="['/operations/detail']">Add a new manual operation</a>
-            <a class="list-group-item list-group-item-action list-group-item-success" [routerLink]="['/operations/import/file', 'ca-txt-fr']">Import file CA TXT</a>
+            <button type="button" class="list-group-item list-group-item-action list-group-item-warning" (click)="operationDetailAdd.openModal()">Add a new manual operation</button>
+            <button type="button" class="list-group-item list-group-item-action list-group-item-success" [routerLink]="['/operations/import/file', 'ca-txt-fr']">Import file CA TXT</button>
         </ul>
     </div>
+    <my-operation-detail [saveDB]="true" (onOperationUpdate)="onOperationUpdate(null, $event)" [addOnly]="true" #operationDetailAdd></my-operation-detail>
 </div>

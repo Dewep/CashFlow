@@ -8,12 +8,16 @@ body, #main-header, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6, .nav-t
     margin-bottom: 1rem;
 }
 
+article {
+    margin-bottom: 0.5rem;
+}
+
 select[multiple] {
     overflow-y: auto;
     height: 15rem;
 }
 
-.tag {
+.tag, .btn {
     margin: 0 0.1rem;
 }
 

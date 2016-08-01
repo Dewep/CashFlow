@@ -1,10 +1,10 @@
 import { BaseModelDB } from '../db/base-model-db';
 
 export class Account extends BaseModelDB {
-    name: string;
-    number: number;
-    bank: string;
-    current: boolean;
+    name: string = '';
+    number: string = '';
+    bank: string = '';
+    current: boolean = false;
 
     getLongTitle() {
         return `${this.name} (${this.bank} - ${this.number})`;

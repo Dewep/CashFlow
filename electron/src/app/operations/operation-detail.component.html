@@ -1,80 +1,106 @@
-<h2><span *ngIf="adding">Add a new operation</span><span *ngIf="!adding">Edit the operation #{{model.id}}</span></h2>
+<div class="list-group-item list-group-item-action display-elements-hover-only" *ngIf="!addOnly">
+    <span *ngFor="let missing of operation.getImportantMissings()" class="tag tag-danger tag-pill pull-xs-right">{{missing}}</span>
+    <span *ngFor="let tag of operation.tags" class="tag tag-{{tag.getColor()}} tag-pill pull-xs-right">{{tag.name}}</span>
+    <h5 class="list-group-item-heading">
+        <button type="button" class="btn btn-sm btn-info" (click)="openModal()"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+        {{operation.getTitle()}} <span class="tag tag-{{operation.getPriceColor()}}">{{operation.price}}€</span>
+    </h5>
+    <p class="list-group-item-text">
+        <span *ngFor="let info of operation.getInformations()" class="tag tag-default">{{info}}</span>
+        <small class="display-on-hover-only">{{operation.getDescription()}}</small>
+    </p>
+</div>
 
-<div class="offset-sm-1 col-sm-10">
-    <div class="alert alert-danger" role="alert" *ngIf="error">
-        <strong>{{error}}</strong>
-    </div>
+<div *ngIf="modalOpen">
+    <div class="modal-backdrop fade" [class.in]="modalIn"></div>
+    <div class="modal fade" [class.in]="modalIn" (click)="closeModal()" style="display: block; overflow-x: hidden; overflow-y: auto;">
+        <div class="modal-dialog modal-lg" (click)="clickOnModal($event)">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="closeModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Operation details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger" role="alert" *ngIf="error">
+                        <strong>{{error}}</strong>
+                    </div>
 
-    <div class="form-group row">
-        <label for="formOperationInputName" class="col-sm-2 col-form-label">Name</label>
-        <div class="col-sm-10">
-            <input [(ngModel)]="model.name" type="text" class="form-control" id="formOperationInputName" placeholder="Operation name">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="formOperationInputDate" class="col-sm-2 col-form-label">Date</label>
-        <div class="col-sm-10">
-            <input [(ngModel)]="model.date" type="date" class="form-control" id="formOperationInputDate" placeholder="Operation date">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="formOperationInputRealDate" class="col-sm-2 col-form-label">Real date</label>
-        <div class="col-sm-10">
-            <input [(ngModel)]="model.real_date" type="date" class="form-control" id="formOperationInputRealDate" placeholder="Real operation date">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="formOperationInputDescription" class="col-sm-2 col-form-label">Description</label>
-        <div class="col-sm-10">
-            <textarea [(ngModel)]="model.description" class="form-control" id="formOperationInputDescription" rows="5"></textarea>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="formOperationInputPrice" class="col-sm-2 col-form-label">Price</label>
-        <div class="col-sm-10">
-            <div class="input-group">
-                <input [(ngModel)]="model.price" type="number" step="0.01" class="form-control" id="formOperationInputPrice" placeholder="Price (can be negative)">
-                <div class="input-group-addon">€</div>
+                    <div class="form-group row">
+                        <label for="formOperationInputName" class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="operationModel.name" type="text" class="form-control" id="formOperationInputName" placeholder="Operation name">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formOperationInputDate" class="col-sm-2 col-form-label">Date</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="operationModel.date" type="date" class="form-control" id="formOperationInputDate" placeholder="Operation date">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formOperationInputRealDate" class="col-sm-2 col-form-label">Real date</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="operationModel.real_date" type="date" class="form-control" id="formOperationInputRealDate" placeholder="Real operation date">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formOperationInputDescription" class="col-sm-2 col-form-label">Description</label>
+                        <div class="col-sm-10">
+                            <textarea [(ngModel)]="operationModel.description" class="form-control" id="formOperationInputDescription" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formOperationInputPrice" class="col-sm-2 col-form-label">Price</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input [(ngModel)]="operationModel.price" type="number" step="0.01" class="form-control" id="formOperationInputPrice" placeholder="Price (can be negative)">
+                                <div class="input-group-addon">€</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formOperationInputBankOperationID" class="col-sm-2 col-form-label">Bank operation ID</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="operationModel.bank_operation_id" type="text" class="form-control" id="formOperationInputBankOperationID" placeholder="Bank operation ID">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formOperationInputAccount" class="col-sm-2 col-form-label">Bank account</label>
+                        <div class="col-sm-10">
+                            <select [(ngModel)]="operationModel.account" class="form-control" id="formOperationInputAccount">
+                                <option *ngFor="let account of accounts" [ngValue]="account">{{account.getLongTitle()}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formOperationInputTags" class="col-sm-2 col-form-label">Tags</label>
+                        <div class="col-sm-10">
+                            <select [(ngModel)]="operationModel.tags" multiple class="form-control" id="formOperationInputTags">
+                                <option *ngFor="let tag of tags" [ngValue]="tag">{{tag.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formOperationInputTitle" class="col-sm-2 col-form-label">Custom title</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="operationModel.title" type="text" class="form-control" id="formOperationInputTitle" placeholder="Custom title">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formOperationInputCompany" class="col-sm-2 col-form-label">Company</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="operationModel.company" type="text" class="form-control" id="formOperationInputCompany" placeholder="Company">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+                    <button type="button" class="btn btn-primary" (click)="save()">Save changes</button>
+                    <button type="button" class="btn btn-danger" (click)="delete()" *ngIf="operationModel.id > 0">Delete the operation</button>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="formOperationInputBankOperationID" class="col-sm-2 col-form-label">Bank operation ID</label>
-        <div class="col-sm-10">
-            <input [(ngModel)]="model.bank_operation_id" type="text" class="form-control" id="formOperationInputBankOperationID" placeholder="Bank operation ID">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="formOperationInputAccount" class="col-sm-2 col-form-label">Bank account</label>
-        <div class="col-sm-10">
-            <select [(ngModel)]="model.account" class="form-control" id="formOperationInputAccount">
-                <option *ngFor="let account of accounts" [ngValue]="account">{{account.getLongTitle()}}</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="formOperationInputTags" class="col-sm-2 col-form-label">Tags</label>
-        <div class="col-sm-10">
-            <select [(ngModel)]="model.tags" multiple class="form-control" id="formOperationInputTags">
-                <option *ngFor="let tag of tags" [ngValue]="tag">{{tag.name}}</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="formOperationInputTitle" class="col-sm-2 col-form-label">Custom title</label>
-        <div class="col-sm-10">
-            <input [(ngModel)]="model.title" type="text" class="form-control" id="formOperationInputTitle" placeholder="Custom title">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="formOperationInputCompany" class="col-sm-2 col-form-label">Company</label>
-        <div class="col-sm-10">
-            <input [(ngModel)]="model.company" type="text" class="form-control" id="formOperationInputCompany" placeholder="Company">
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="offset-sm-2 col-sm-10">
-            <button (click)="save()" class="btn btn-primary">Save</button>
         </div>
     </div>
 </div>

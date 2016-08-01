@@ -4,21 +4,21 @@ import { Operation } from '../operation';
 
 import { Tag } from '../../tags/tag';
 import { TagService } from '../../tags/tag.service';
+import { Company } from '../../companies/company';
+import { CompanyService } from '../../companies/company.service';
+import { Title } from '../../titles/title';
+import { TitleService } from '../../titles/title.service';
 
 export abstract class BaseImportPlugin {
-    paymentCheque: Tag = null;
-    paymentDebitCard: Tag = null;
-    paymentTransfer: Tag = null;
-    paymentCash: Tag = null;
-    paymentPaypal: Tag = null;
-    paymentDirectDebit: Tag = null;
-
-    getTagPaymentCheque(): Tag { return this.paymentCheque; }
-    getTagPaymentDebitCard(): Tag { return this.paymentDebitCard; }
-    getTagPaymentTransfer(): Tag { return this.paymentTransfer; }
-    getTagPaymentCash(): Tag { return this.paymentCash; }
-    getTagPaymentPaypal(): Tag { return this.paymentPaypal; }
-    getTagPaymentDirectDebit(): Tag { return this.paymentDirectDebit; }
+    tagPaymentCheque: Tag = null;
+    tagPaymentDebitCard: Tag = null;
+    tagPaymentTransfer: Tag = null;
+    tagPaymentCash: Tag = null;
+    tagPaymentPaypal: Tag = null;
+    tagPaymentDirectDebit: Tag = null;
+    tags: Tag[] = [];
+    companies: Company[] = [];
+    titles: Title[] = [];
 
     abstract parseContent(buffer: Buffer): Promise<Operation[]>;
 
@@ -26,25 +26,56 @@ export abstract class BaseImportPlugin {
         var injector = null;
         return new Promise<Buffer>((resolve, reject) => {
             injector = ReflectiveInjector.resolveAndCreate([
-                TagService
+                TagService,
+                CompanyService,
+                TitleService
             ]);
             resolve(buffer);
         }).then(buffer => {
-            return injector.get(TagService)
-                .getAll()
-                .then(items => {
+            return injector.get(TagService).getAll().then(items => {
                     items.map(item => {
-                        if (item.name == 'payment:cheque') this.paymentCheque = item;
-                        if (item.name == 'payment:debit-card') this.paymentDebitCard = item;
-                        if (item.name == 'payment:transfer') this.paymentTransfer = item;
-                        if (item.name == 'payment:cash') this.paymentCash = item;
-                        if (item.name == 'payment:paypal') this.paymentPaypal = item;
-                        if (item.name == 'payment:direct-debit') this.paymentDirectDebit = item;
+                        if (item.name == 'payment:cheque') this.tagPaymentCheque = item;
+                        if (item.name == 'payment:debit-card') this.tagPaymentDebitCard = item;
+                        if (item.name == 'payment:transfer') this.tagPaymentTransfer = item;
+                        if (item.name == 'payment:cash') this.tagPaymentCash = item;
+                        if (item.name == 'payment:paypal') this.tagPaymentPaypal = item;
+                        if (item.name == 'payment:direct-debit') this.tagPaymentDirectDebit = item;
                     });
+                    this.tags = items;
+                    return buffer;
+                });
+        }).then(buffer => {
+            return injector.get(CompanyService).getAll().then(items => {
+                    this.companies = items;
+                    return buffer;
+                });
+        }).then(buffer => {
+            return injector.get(TitleService).getAll().then(items => {
+                    this.titles = items;
                     return buffer;
                 });
         }).then(buffer => {
             return this.parseContent(buffer);
+        }).then(operations => {
+            operations.forEach((value, index) => {
+                var description = value.name.toLowerCase() + ' ' + value.description.toLowerCase();
+                this.tags.forEach(tag => {
+                    if (tag.autoMatches.some(match => description.indexOf(match.toLowerCase()) !== -1)) {
+                        operations[index].tags.push(tag);
+                    }
+                });
+                this.companies.forEach(company => {
+                    if (!operations[index].company && company.autoMatches.some(match => description.indexOf(match.toLowerCase()) !== -1)) {
+                        operations[index].company = company.name;
+                    }
+                });
+                this.titles.forEach(title => {
+                    if (!operations[index].title && title.autoMatches.some(match => description.indexOf(match.toLowerCase()) !== -1)) {
+                        operations[index].title = title.name;
+                    }
+                });
+            });
+            return operations;
         });
     }
 }

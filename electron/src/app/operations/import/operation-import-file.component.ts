@@ -5,7 +5,7 @@ import { Operation } from '../operation';
 import { OperationService } from '../operation.service';
 import { Account } from '../../accounts/account';
 import { AccountService } from '../../accounts/account.service';
-import { OperationsListComponent } from '../operations-list.component';
+import { OperationDetailComponent } from '../operation-detail.component';
 
 import { BaseImportPlugin } from './base-import-plugin';
 import { ImportPluginFileCATxtFR } from './plugins/import-plugin-file-ca-txt-fr';
@@ -16,7 +16,7 @@ const fs = (<any>window).require('fs');
     selector: 'my-operation-import-file',
     templateUrl: 'app/operations/import/operation-import-file.component.html',
     directives: [
-        OperationsListComponent
+        OperationDetailComponent
     ]
 })
 
@@ -127,5 +127,13 @@ export class OperationImportFileComponent implements OnInit, OnDestroy {
                 console.error(error);
                 this.error = error;
             });
+    }
+
+    onOperationUpdate(old_operation, new_operation) {
+        this.operations.forEach((value, index) => {
+            if (value === old_operation) {
+                this.operations[index] = new_operation;
+            }
+        });
     }
 }

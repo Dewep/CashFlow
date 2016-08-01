@@ -14,9 +14,23 @@ export class TagsComponent implements OnInit {
     modelTag: Tag;
     addingTag = true;
     error: any;
+    newMatch: string = "";
 
     constructor(private tagService: TagService) {
         this.addTag();
+    }
+
+    addMatch() {
+        if (this.selectedTag && this.newMatch.length && this.selectedTag.autoMatches.indexOf(this.newMatch) === -1) {
+            this.selectedTag.autoMatches.push(this.newMatch);
+            this.newMatch = "";
+        }
+    }
+
+    deleteMatch(match) {
+        if (this.selectedTag) {
+            this.selectedTag.autoMatches = this.selectedTag.autoMatches.filter(item => item !== match);
+        }
     }
 
     getTags() {

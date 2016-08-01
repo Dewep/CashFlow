@@ -3,14 +3,14 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { Operation } from './operation';
 import { OperationService } from './operation.service';
-import { OperationsListComponent } from './operations-list.component';
+import { OperationDetailComponent } from './operation-detail.component';
 
 @Component({
     selector: 'my-operations',
     templateUrl: 'app/operations/operations.component.html',
     directives: [
         ROUTER_DIRECTIVES,
-        OperationsListComponent
+        OperationDetailComponent
     ]
 })
 
@@ -19,6 +19,22 @@ export class OperationsComponent implements OnInit {
     error: any;
 
     constructor(private operationService: OperationService) {
+    }
+
+    onOperationUpdate(old_operation, new_operation) {
+        if (old_operation !== null) {
+            this.operations.forEach((value, index) => {
+                if (value === old_operation) {
+                    if (new_operation !== null) {
+                        this.operations[index] = new_operation;
+                    } else {
+                        this.operations.splice(index, 1);
+                    }
+                }
+            });
+        } else if (new_operation !== null) {
+            this.operations.push(new_operation);
+        }
     }
 
     getOperations() {
@@ -30,14 +46,5 @@ export class OperationsComponent implements OnInit {
 
     ngOnInit() {
         this.getOperations();
-    }
-
-    delete(operation) {
-        this.operationService
-            .delete(operation)
-            .then(res => {
-                this.operations = this.operations.filter(t => t.id !== operation.id);
-            })
-            .catch(error => this.error = error);
     }
 }

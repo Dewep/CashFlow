@@ -4,13 +4,15 @@ import { NGB_DIRECTIVES, NGB_PRECOMPILE } from '@ng-bootstrap/ng-bootstrap';
 
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { OperationsComponent } from '../operations/operations.component';
-import { OperationsListComponent } from '../operations/operations-list.component';
-import { OperationDetailComponent } from '../operations/operation-detail.component';
 import { OperationImportFileComponent } from '../operations/import/operation-import-file.component';
 import { TagsComponent } from '../tags/tags.component';
+import { CompaniesComponent } from '../companies/companies.component';
+import { TitlesComponent } from '../titles/titles.component';
 import { AccountsComponent } from '../accounts/accounts.component';
 
 import { TagService } from '../tags/tag.service';
+import { CompanyService } from '../companies/company.service';
+import { TitleService } from '../titles/title.service';
 import { AccountService } from '../accounts/account.service';
 import { OperationService } from '../operations/operation.service';
 
@@ -23,6 +25,8 @@ import { OperationService } from '../operations/operation.service';
     ],
     providers: [
         TagService,
+        CompanyService,
+        TitleService,
         AccountService,
         OperationService
     ],
@@ -30,10 +34,10 @@ import { OperationService } from '../operations/operation.service';
         NGB_PRECOMPILE,
         DashboardComponent,
         OperationsComponent,
-        OperationsListComponent,
-        OperationDetailComponent,
         OperationImportFileComponent,
         TagsComponent,
+        CompaniesComponent,
+        TitlesComponent,
         AccountsComponent
     ]
 })

@@ -9,16 +9,16 @@ import { TagService } from '../tags/tag.service';
 import { AccountService } from '../accounts/account.service';
 
 export class Operation extends BaseModelDB {
-    name: string;
-    date: string;
-    real_date: string;
-    description: string;
-    price: number;
-    bank_operation_id: string;
-    account: Account;
+    name: string = '';
+    date: string = '';
+    real_date: string = '';
+    description: string = '';
+    price: number = 0;
+    bank_operation_id: string = '';
+    account: Account = null;
     tags: Tag[] = [];
-    title: string;
-    company: string;
+    title: string = '';
+    company: string = '';
 
     getTitle() {
         var prefix = "";
@@ -108,7 +108,7 @@ export class Operation extends BaseModelDB {
 
     toStandardObject() {
         var obj = super.toStandardObject();
-        obj["account"] = this.account !== undefined ? this.account.id : null;
+        obj["account"] = this.account ? this.account.id : null;
         obj["tags"] = this.tags.map(item => item.id);
         return obj;
     }

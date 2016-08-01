@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
 
 import { Operation } from './operation';
 import { OperationService } from './operation.service';
@@ -10,24 +9,48 @@ import { TagService } from '../tags/tag.service';
 
 @Component({
     selector: 'my-operation-detail',
-    templateUrl: 'app/operations/operation-detail.component.html'
+    templateUrl: 'app/operations/operation-detail.component.html',
+//    styles: `body { overflow: hidden; }`
 })
 
-export class OperationDetailComponent implements OnInit, OnDestroy {
+export class OperationDetailComponent implements OnInit {
+    @Input() operation: Operation = new Operation();
+    @Input() saveDB: boolean = false;
+    @Input() addOnly: boolean = false;
+    @Output() onOperationUpdate = new EventEmitter();
+    operationModel: Operation = new Operation();
     tags_origin: Tag[] = [];
     tags: Tag[] = [];
     accounts_origin: Account[] = [];
     accounts: Account[];
-    model: Operation = new Operation();
     error: any;
-    sub: any;
-    adding: boolean = true;
+    modalOpen: boolean = false;
+    modalIn: boolean = false;
 
     constructor(private operationService: OperationService,
         private accountService: AccountService,
-        private tagService: TagService,
-        private route: ActivatedRoute,
-        private router: Router) {
+        private tagService: TagService) {
+    }
+
+    ngOnInit() {
+    }
+
+    openModal() {
+        this.operationModel.fromStandardObject(this.operation.toStandardObject()).then(_ => {
+            this.getTags();
+            this.getAccounts();
+            this.modalOpen = true;
+            setTimeout(_ => this.modalIn = true, 100);
+        });
+    }
+
+    closeModal() {
+        this.modalIn = false;
+        setTimeout(_ => this.modalOpen = false, 500);
+    }
+
+    clickOnModal(event: Event) {
+        event.stopPropagation();
     }
 
     getTags() {
@@ -53,47 +76,39 @@ export class OperationDetailComponent implements OnInit, OnDestroy {
     }
 
     updateComponentList() {
-        if (this.model) {
-            var ids_tags_model = [];
-            this.model.tags.map(item => ids_tags_model.push(item.id));
-            this.tags = this.model.tags.concat(this.tags_origin.filter(item => ids_tags_model.indexOf(item.id) === -1));
+        var ids_tags_operation = [];
+        this.operationModel.tags.map(item => ids_tags_operation.push(item.id));
+        this.tags = this.operationModel.tags.concat(this.tags_origin.filter(item => ids_tags_operation.indexOf(item.id) === -1));
+
+        if (this.operationModel.account) {
+            this.accounts = [this.operationModel.account].concat(this.accounts_origin.filter(item => item.id !== this.operationModel.account.id));
         }
-
-        if (this.model && this.model.account) {
-            this.accounts = [this.model.account].concat(this.accounts_origin.filter(item => item.id !== this.model.account.id));
-        }
-    }
-
-    ngOnInit() {
-        this.getTags();
-        this.getAccounts();
-        this.sub = this.route.params.subscribe(params => {
-            this.adding = true;
-            if (params['id'] !== undefined) {
-                let id = +params['id'];
-                this.operationService.findOne(item => item.id === id).then(model => {
-                    if (model) {
-                        this.adding = false;
-                        this.model = model;
-                        this.updateComponentList();
-                    }
-                });
-            }
-        });
-    }
-
-    ngOnDestroy() {
-        this.sub.unsubscribe();
     }
 
     save() {
         this.error = null;
-        this.operationService.save(this.model)
+        this.operation = this.operationModel;
+        this.onOperationUpdate.emit(this.operation);
+        if (!this.saveDB) {
+            this.closeModal();
+            return;
+        }
+        this.operationService.save(this.operation)
             .then(res => {
-                this.router.navigate(['/operations']);
+                this.closeModal();
             })
             .catch(error => {
                 this.error = error;
             });
+    }
+
+    delete() {
+        this.operationService
+            .delete(this.operationModel)
+            .then(res => {
+                this.onOperationUpdate.emit(null);
+                this.closeModal();
+            })
+            .catch(error => this.error = error);
     }
 }
