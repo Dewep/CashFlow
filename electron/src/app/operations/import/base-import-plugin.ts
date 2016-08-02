@@ -1,11 +1,11 @@
 import { ReflectiveInjector } from '@angular/core';
 
-import { Operation } from '../operation';
-
 import { Tag } from '../../tags/tag';
 import { TagService } from '../../tags/tag.service';
 import { Company } from '../../companies/company';
 import { CompanyService } from '../../companies/company.service';
+import { Operation } from '../../operations/operation';
+import { OperationService } from '../../operations/operation.service';
 import { Title } from '../../titles/title';
 import { TitleService } from '../../titles/title.service';
 
@@ -13,6 +13,7 @@ export abstract class BaseImportPlugin {
     tags: Tag[] = [];
     companies: Company[] = [];
     titles: Title[] = [];
+    operations: Operation[] = [];
 
     abstract parseContent(buffer: Buffer): Promise<Operation[]>;
 
@@ -22,7 +23,8 @@ export abstract class BaseImportPlugin {
             injector = ReflectiveInjector.resolveAndCreate([
                 TagService,
                 CompanyService,
-                TitleService
+                TitleService,
+                OperationService
             ]);
             resolve(buffer);
         }).then(buffer => {
@@ -41,12 +43,20 @@ export abstract class BaseImportPlugin {
                 return buffer;
             });
         }).then(buffer => {
+            return injector.get(OperationService).getAll().then(items => {
+                this.operations = items;
+                return buffer;
+            });
+        }).then(buffer => {
             return this.parseContent(buffer);
         }).then(operations => {
+            // Remove duplicate operations:
+            operations = operations.filter(o1 => !this.operations.some(o2 => o1.price == o2.price && o1.date == o2.date && o1.name == o2.name));
+            // Add parameters (tag+company+title):
             operations.forEach((value, index) => {
                 var description = value.name.toLowerCase() + ' ' + value.description.toLowerCase();
                 this.tags.forEach(tag => {
-                    if (tag.autoMatches.some(match => description.indexOf(match.toLowerCase()) !== -1)) {
+                    if (tag.autoMatches.some(match => description.indexOf(match.toLowerCase()) !== -1) && tag.isAcceptedOperation(value)) {
                         operations[index].tags.push(tag);
                     }
                 });

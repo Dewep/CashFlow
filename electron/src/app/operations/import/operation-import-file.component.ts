@@ -132,7 +132,11 @@ export class OperationImportFileComponent implements OnInit, OnDestroy {
     onOperationUpdate(old_operation, new_operation) {
         this.operations.forEach((value, index) => {
             if (value === old_operation) {
-                this.operations[index] = new_operation;
+                if (new_operation !== null) {
+                    this.operations[index] = new_operation;
+                } else {
+                    this.operations.splice(index, 1);
+                }
             }
         });
     }

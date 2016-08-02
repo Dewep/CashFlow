@@ -98,7 +98,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
                     <button type="button" class="btn btn-primary" (click)="save()">Save changes</button>
-                    <button type="button" class="btn btn-danger" (click)="delete()" *ngIf="operationModel.id > 0">Delete the operation</button>
+                    <button type="button" class="btn btn-danger" (click)="delete()" *ngIf="!addOnly">Delete the operation</button>
                 </div>
             </div>
         </div>

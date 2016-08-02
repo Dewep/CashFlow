@@ -67,7 +67,8 @@ export class Operation extends BaseModelDB {
         if (!this.description) missings.push('Missing description');
         if (!this.price) missings.push('Missing price');
         if (!this.account) missings.push('Missing account');
-        if (!this.tags.length) missings.push('Missing tags');
+        if (!this.tags.some(tag => tag.name.startsWith('payment:'))) missings.push('Missing payment tag');
+        if (!this.tags.some(tag => !tag.name.startsWith('payment:'))) missings.push('Missing general tag');
         if (!this.title) missings.push('Missing title');
         if (!this.company) missings.push('Missing company');
         return missings;
