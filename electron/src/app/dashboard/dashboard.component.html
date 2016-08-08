@@ -1,3 +1,23 @@
-<h2>Dashboard</h2>
-
+<h3>Balance account</h3>
 <operations-line-chart [initialAccountBalance]="initialAccountBalance" [operations]="operations"></operations-line-chart>
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Debits</h3>
+        <tags-sunburst-chart [operations]="operations" [tagsFilter]="'debit:'"></tags-sunburst-chart>
+    </div>
+    <div class="col-md-4">
+        <h3>Credits</h3>
+        <tags-sunburst-chart [operations]="operations" [tagsFilter]="'credit:'"></tags-sunburst-chart>
+    </div>
+    <div class="col-md-4">
+        <h3>Payments</h3>
+        <tags-sunburst-chart [operations]="operations" [tagsFilter]="'payment:'"></tags-sunburst-chart>
+    </div>
+</div>
+
+<h3>Tags debits</h3>
+<tags-stacked-area [tagsFilter]="'debit:'" [operations]="operations"></tags-stacked-area>
+
+<h3>Tags credits</h3>
+<tags-stacked-area [tagsFilter]="'credit:'" [operations]="operations"></tags-stacked-area>

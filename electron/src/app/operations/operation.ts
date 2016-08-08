@@ -20,6 +20,9 @@ export class Operation extends BaseModelDB {
     title: string = '';
     company: string = '';
 
+    getShortTitle() {
+        return this.title ? this.title : this.name;
+    }
     getTitle() {
         var prefix = "";
         if (this.company) {

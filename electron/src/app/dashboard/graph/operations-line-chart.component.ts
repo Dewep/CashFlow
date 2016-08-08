@@ -16,6 +16,7 @@ declare let d3: any;
 export class OperationsLineChartComponent implements OnInit, OnChanges {
     @Input() initialAccountBalance: number = 0;
     @Input() operations: Operation[] = [];
+    @Input() height: number = 450;
     options: any;
     data: any;
 
@@ -76,16 +77,16 @@ export class OperationsLineChartComponent implements OnInit, OnChanges {
         this.options = {
             chart: {
                 type: 'lineChart',
-                height: 450,
+                height: this.height,
                 duration: 500,
-                x: function(d) { return new Date(d.date); },
-                y: function(d) { return d.value; },
+                x: function (d) { return new Date(d.date); },
+                y: function (d) { return d.value; },
                 forceY: [0],
                 xAxis: {
                     tickFormat: this.formatDate
                 },
                 yAxis: {
-                    tickFormat: function(d) {
+                    tickFormat: function (d) {
                         return d + "€";
                     }
                 },
@@ -157,32 +158,5 @@ export class OperationsLineChartComponent implements OnInit, OnChanges {
 
     ngAfterViewInit() {
         this.nvD3.chart.update();
-        this.nvD3.chart.tooltip.contentGenerator(function (d) {
-          var html = "<h2>"+d.value+"</h2> <ul>";
-
-          d.series.forEach(function(elem){
-            html += "<li><h3 style='color:"+elem.color+"'>"
-                    +elem.key+"</h3> : <b>"+elem.value+"</b></li>";
-          })
-          html += "</ul>"
-          return html;
-        })
-        //var svg = d3.select("#" + this.nvD3.chart.id + " svg");
-        /*console.log(this.nvD3.svg);
-        this.nvD3.svg.append("line")
-            .style("stroke", "#FF7F0E")
-            .style("stroke-width", "2.5px")
-            .attr("x1", 0)
-            .attr("y1", this.nvD3.chart.yAxis.scale()(2500.50))
-            .attr("x2", 500)
-            .attr("y2", this.nvD3.chart.yAxis.scale()(2500.50));
-            console.log(this.nvD3.svg);*/
-
-        /*d3.select("#" + chartName + " svg")
-            .append("text")
-            .attr("x", width - margin.right / 2)
-            .attr("y", yValueScale(yValue) + margin.top)
-            .attr("text-anchor", "middle")
-            .text(text);*/
     }
 }
