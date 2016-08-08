@@ -8,12 +8,14 @@
     'app':                        'app', // 'app',
     '@angular':                   'vendor/@angular',
     '@ng-bootstrap':              'vendor/@ng-bootstrap',
-    'rxjs':                       'vendor/rxjs'
+    'rxjs':                       'vendor/rxjs',
+    'ng2-nvd3':                   'vendor/ng2-nvd3'
   };
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {
-    'app':                        { main: 'main.js',  defaultExtension: 'js' },
+    'app':                        { main: 'main.js', defaultExtension: 'js' },
     'rxjs':                       { defaultExtension: 'js' },
+    'ng2-nvd3':                   { main: 'ng2-nvd3.js', defaultExtension: 'js' },
     '@ng-bootstrap/ng-bootstrap': { main: 'index.js', defaultExtension: 'js' },
   };
   var ngPackageNames = [

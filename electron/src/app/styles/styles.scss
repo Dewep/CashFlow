@@ -29,3 +29,25 @@ select[multiple] {
 .display-elements-hover-only:hover .display-on-hover-only {
     display: inherit;
 }
+
+.nvtooltip {
+    background: none;
+    border: 0;
+}
+.nvtooltip .card {
+    max-width: 300px;
+    white-space: normal;
+}
+.nvtooltip .list-group-item, .nvtooltip .card-header, .nvtooltip .card-footer {
+    padding: .25rem .5rem;
+}
+.nvtooltip .list-group-item {
+    border-left: 0;
+    border-right: 0;
+}
+.nvtooltip .list-group-item:first-child {
+    border-top: 0;
+}
+.nvtooltip .list-group-item:last-child {
+    border-bottom: 0;
+}

@@ -81,6 +81,27 @@ gulp.task('private:copy-vendor-font-awesome', function (done) {
     );
 });
 
+// NVD3
+gulp.task('private:copy-vendor-nvd3-css', function() {
+    return gulp.src('node_modules/nvd3/build/nv.d3.min.css').pipe(gulp.dest('dist/frontend/vendor/css'));
+});
+gulp.task('private:copy-vendor-nvd3-js', function() {
+    return gulp.src(['node_modules/d3/d3.min.js', 'node_modules/nvd3/build/nv.d3.min.js']).pipe(gulp.dest('dist/frontend/vendor/js'));
+});
+gulp.task('private:copy-vendor-ng2-nvd3', function() {
+    return gulp.src('node_modules/ng2-nvd3/build/lib/**/*').pipe(gulp.dest('dist/frontend/vendor/ng2-nvd3'));
+});
+gulp.task('private:copy-vendor-nvd3', function (done) {
+    gulpSequence(
+        [
+            'private:copy-vendor-nvd3-css',
+            'private:copy-vendor-nvd3-js',
+            'private:copy-vendor-ng2-nvd3'
+        ],
+        done
+    );
+});
+
 // SYSTEM JS
 gulp.task('private:copy-vendor-system', function() {
     return gulp.src([
@@ -110,6 +131,7 @@ gulp.task('private:build-vendor', function (done) {
             'private:copy-vendor-rxjs',
             'private:copy-vendor-bootstrap',
             'private:copy-vendor-font-awesome',
+            'private:copy-vendor-nvd3',
             'private:copy-vendor-system'
         ],
         [
