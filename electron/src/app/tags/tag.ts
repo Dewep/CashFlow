@@ -2,8 +2,12 @@ import { OperationParameter } from '../operations/operation-parameter';
 import { Operation } from '../operations/operation';
 
 export class Tag extends OperationParameter {
+    isPaiement(): boolean {
+        return this.name.startsWith("payment:");
+    }
+
     getColor(): string {
-        if (this.name.startsWith("payment:")) {
+        if (this.isPaiement()) {
             return "warning";
         }
         return "info";

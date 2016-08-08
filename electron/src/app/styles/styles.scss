@@ -51,3 +51,10 @@ select[multiple] {
 .nvtooltip .list-group-item:last-child {
     border-bottom: 0;
 }
+
+.dashboard-filters .input-group-addon {
+    width: 100px;
+}
+.dashboard-filters .list-group-item {
+    padding: .25rem .5rem;
+}

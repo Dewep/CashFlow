@@ -40,7 +40,7 @@ export class OperationsComponent implements OnInit {
     getOperations() {
         this.operationService
             .getAll()
-            .then(operations => this.operations = operations)
+            .then(operations => this.operations = operations.sort((o2, o1) => o1.date.localeCompare(o2.date)))
             .catch(error => this.error = error);
     }
 

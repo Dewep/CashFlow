@@ -1,23 +1,60 @@
-<h3>Balance account</h3>
-<operations-line-chart [initialAccountBalance]="initialAccountBalance" [operations]="operations"></operations-line-chart>
-
 <div class="row">
-    <div class="col-md-4">
-        <h3>Debits</h3>
-        <tags-sunburst-chart [operations]="operations" [tagsFilter]="'debit:'"></tags-sunburst-chart>
+    <div class="col-md-3 dashboard-filters">
+        <h3>Dashboard filters</h3>
+        <section>
+            <div class="input-group">
+                <span class="input-group-addon">Date start</span>
+                <input type="date" class="form-control" [(ngModel)]="dateStart" (ngModelChange)="filterData()">
+            </div>
+        </section>
+        <section>
+            <div class="input-group">
+                <span class="input-group-addon">Date end</span>
+                <input type="date" class="form-control" [(ngModel)]="dateEnd" (ngModelChange)="filterData()">
+            </div>
+        </section>
+        <section>
+            <h5>Accounts <small class="pull-xs-right"><button class="btn btn-sm btn-success" (click)="filteredAccounts = accounts.slice()">All</button> <button class="btn btn-sm btn-danger" (click)="filteredAccounts = []">None</button></small></h5>
+            <div class="list-group">
+                <button type="button" class="list-group-item list-group-item-action" [class.active]="filteredAccounts.indexOf(account) != -1" *ngFor="let account of accounts" (click)="toggleFilter(filteredAccounts, account)">
+                    <span *ngIf="filteredAccounts.indexOf(account) != -1" class="tag tag-success tag-pill pull-xs-right">selected</span>
+                    {{account.getTitle()}}
+                </button>
+            </div>
+        </section>
+        <section>
+            <h5>Tags <small class="pull-xs-right"><button class="btn btn-sm btn-success" (click)="filteredTags = tags.slice()">All</button> <button class="btn btn-sm btn-danger" (click)="filteredTags = []">None</button></small></h5>
+            <div class="list-group">
+                <button type="button" class="list-group-item list-group-item-action list-group-item-{{tag.getColor()}}" [class.active]="filteredTags.indexOf(tag) != -1" *ngFor="let tag of tags" (click)="toggleFilter(filteredTags, tag)">
+                    <span *ngIf="filteredTags.indexOf(tag) != -1" class="tag tag-success tag-pill pull-xs-right">selected</span>
+                    {{tag.name}}
+                </button>
+            </div>
+        </section>
     </div>
-    <div class="col-md-4">
-        <h3>Credits</h3>
-        <tags-sunburst-chart [operations]="operations" [tagsFilter]="'credit:'"></tags-sunburst-chart>
-    </div>
-    <div class="col-md-4">
-        <h3>Payments</h3>
-        <tags-sunburst-chart [operations]="operations" [tagsFilter]="'payment:'"></tags-sunburst-chart>
+    <div class="col-md-9">
+        <h3>Balance operations</h3>
+        <operations-line-chart [initialAccountBalance]="initialAccountBalance" [operations]="operations" [dateStart]="dateStart" [dateEnd]="dateEnd"></operations-line-chart>
+
+        <div class="row">
+            <div class="col-md-4">
+                <h3 class="text-md-center">Debits</h3>
+                <tags-sunburst-chart [operations]="filteredOperations" [tagsFilter]="'debit:'"></tags-sunburst-chart>
+            </div>
+            <div class="col-md-4">
+                <h3 class="text-md-center">Credits</h3>
+                <tags-sunburst-chart [operations]="filteredOperations" [tagsFilter]="'credit:'"></tags-sunburst-chart>
+            </div>
+            <div class="col-md-4">
+                <h3 class="text-md-center">Payments</h3>
+                <tags-sunburst-chart [operations]="filteredOperations" [tagsFilter]="'payment:'"></tags-sunburst-chart>
+            </div>
+        </div>
+
+        <h3>Tags debits</h3>
+        <tags-bar-chart [tagsFilter]="'debit:'" [operations]="filteredOperations"></tags-bar-chart>
+
+        <h3>Tags credits</h3>
+        <tags-bar-chart [tagsFilter]="'credit:'" [operations]="filteredOperations"></tags-bar-chart>
     </div>
 </div>
-
-<h3>Tags debits</h3>
-<tags-stacked-area [tagsFilter]="'debit:'" [operations]="operations"></tags-stacked-area>
-
-<h3>Tags credits</h3>
-<tags-stacked-area [tagsFilter]="'credit:'" [operations]="operations"></tags-stacked-area>

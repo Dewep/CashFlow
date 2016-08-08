@@ -49,16 +49,16 @@ export class TagsSunburstChartComponent implements OnInit, OnChanges {
                 if (typeof values[propName] === 'number') {
                     data.push({name: propName, size: values[propName]});
                 } else {
-                    var children = valuesToArray(values[propName]);
-                    if (!children.length) {
-                        children = [{name: propName + ' ERROR', size: 1}];
-                    }
-                    data.push({name: propName, children: children});
+                    data.push({name: propName, children: valuesToArray(values[propName])});
                 }
             }
             return data;
         };
-        this.data = valuesToArray({Operations: values});
+        if (Object.keys(values).length) {
+            this.data = valuesToArray({Operations: values});
+        } else {
+            this.data = [];
+        }
     }
 
     ngOnInit() {

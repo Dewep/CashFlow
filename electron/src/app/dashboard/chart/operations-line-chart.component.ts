@@ -17,6 +17,8 @@ export class OperationsLineChartComponent implements OnInit, OnChanges {
     @Input() initialAccountBalance: number = 0;
     @Input() operations: Operation[] = [];
     @Input() height: number = 450;
+    @Input() dateStart: string = '';
+    @Input() dateEnd: string = '';
     options: any;
     data: any;
 
@@ -32,10 +34,20 @@ export class OperationsLineChartComponent implements OnInit, OnChanges {
             .filter(o => o.date && o.date.length > 0)
             .sort((o1, o2) => o1.date.localeCompare(o2.date));
         var values_average = [];
+        var today_line = undefined;
         if (operations.length) {
             var current_date = new Date(operations[0].date);
-            var end_date = new Date(operations[operations.length - 1].date);
+            var start_date = new Date(this.dateStart);
+            if (!start_date) {
+                start_date = new Date(operations[0].date);
+            }
+            var end_date = new Date(this.dateEnd);
+            if (!end_date) {
+                end_date = new Date(operations[operations.length - 1].date);
+            }
             var balance = this.initialAccountBalance;
+            var min_value = Math.min(0, balance);
+            var max_value = Math.max(0, balance);
             var average_sum = 0;
             var average_number = 0;
             while (current_date <= end_date) {
@@ -45,21 +57,37 @@ export class OperationsLineChartComponent implements OnInit, OnChanges {
                     balance += o.price;
                     day_operations.push(o);
                 });
-                values.push({
-                    date: current_date_string,
-                    value: Math.round(balance * 100) / 100,
-                    operations: day_operations
-                });
-                average_sum += balance;
-                average_number++;
-                values_average.push({
-                    date: current_date_string,
-                    value: Math.round(average_sum * 100 / average_number) / 100
-                });
+                if (current_date >= start_date) {
+                    values.push({
+                        date: current_date_string,
+                        value: Math.round(balance * 100) / 100,
+                        operations: day_operations
+                    });
+                    min_value = Math.min(min_value, balance);
+                    max_value = Math.max(max_value, balance);
+                    average_sum += balance;
+                    average_number++;
+                    values_average.push({
+                        date: current_date_string,
+                        value: Math.round(average_sum * 100 / average_number) / 100
+                    });
+                }
                 current_date.setDate(current_date.getDate() + 1);
             }
+            var today = new Date();
+            if (today >= start_date && today <= end_date) {
+                var today_str = today.toISOString().substr(0, 10);
+                today_line = {
+                    key: "Today",
+                    color: "#E74C3C",
+                    values: [
+                        { date: today_str, value: min_value + 10 },
+                        { date: today_str, value: max_value - 10 }
+                    ]
+                };
+            }
         }
-        this.data = [
+        var data = [
             {
                 key: "Operations",
                 area: true,
@@ -71,6 +99,10 @@ export class OperationsLineChartComponent implements OnInit, OnChanges {
                 values: values_average
             }
         ];
+        if (today_line) {
+            data.push(today_line);
+        }
+        this.data = data;
     }
 
     ngOnInit() {
